@@ -1,10 +1,10 @@
-# Copyright 2016 Google LLC
+# Copyright 2017 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,42 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Google Auth Library for Python."""
+"""Google API Core.
 
-import logging
-import sys
-import warnings
+This package contains common code and utilities used by Google client libraries.
+"""
 
-from google.auth import version as google_auth_version
-from google.auth._default import (
-    default,
-    load_credentials_from_dict,
-    load_credentials_from_file,
+from google.api_core import _python_package_support
+from google.api_core import _python_version_support
+from google.api_core import version as api_core_version
+
+__version__ = api_core_version.__version__
+
+# NOTE: Until dependent artifacts require this version of
+# google.api_core, the functionality below must be made available
+# manually in those artifacts.
+
+# expose dependency checks for external callers
+check_python_version = _python_version_support.check_python_version
+check_dependency_versions = _python_package_support.check_dependency_versions
+warn_deprecation_for_versions_less_than = (
+    _python_package_support.warn_deprecation_for_versions_less_than
 )
+DependencyConstraint = _python_package_support.DependencyConstraint
 
-
-__version__ = google_auth_version.__version__
-
-
-__all__ = ["default", "load_credentials_from_file", "load_credentials_from_dict"]
-
-
-class Python37DeprecationWarning(DeprecationWarning):  # pragma: NO COVER
-    """
-    Deprecation warning raised when Python 3.7 runtime is detected.
-    Python 3.7 support will be dropped after January 1, 2024.
-    """
-
-    pass
-
-
-# Checks if the current runtime is Python 3.7.
-if sys.version_info.major == 3 and sys.version_info.minor == 7:  # pragma: NO COVER
-    message = (
-        "After January 1, 2024, new releases of this library will drop support "
-        "for Python 3.7."
-    )
-    warnings.warn(message, Python37DeprecationWarning)
-
-# Set default logging handler to avoid "No handler found" warnings.
-logging.getLogger(__name__).addHandler(logging.NullHandler())
+# perform version checks against api_core, and emit warnings if needed
+check_python_version(package="google.api_core")
+check_dependency_versions("google.api_core")
