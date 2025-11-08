@@ -13,3 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+from .async_client import DiscussServiceAsyncClient
+from .client import DiscussServiceClient
+
+__all__ = (
+    "DiscussServiceClient",
+    "DiscussServiceAsyncClient",
+)
